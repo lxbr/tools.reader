@@ -590,7 +590,7 @@
   [rdr _ opts pending-forms]
   (when-not *read-eval*
     (err/reader-error rdr "#= not allowed when *read-eval* is false"))
-  (eval (read* rdr true nil opts pending-forms)))
+  (do #_eval (read* rdr true nil opts pending-forms)))
 
 (def ^:private ^:dynamic gensym-env nil)
 
@@ -747,7 +747,7 @@
   [rdr backquote opts pending-forms]
   (binding [gensym-env {}]
     (-> (read* rdr true nil opts pending-forms)
-      syntax-quote*)))
+      #_syntax-quote*)))
 
 (defn- read-namespaced-map
   [rdr _ opts pending-forms]
@@ -814,7 +814,7 @@
 (defn- read-ctor [rdr class-name opts pending-forms]
   (when-not *read-eval*
     (err/reader-error rdr "Record construction syntax can only be used when *read-eval* == true"))
-  (let [class (Class/forName (name class-name) false (RT/baseLoader))
+  #_(let [class (Class/forName (name class-name) false (RT/baseLoader))
         ch (read-past whitespace? rdr)] ;; differs from clojure
     (if-let [[end-ch form] (case ch
                              \[ [\] :short]
